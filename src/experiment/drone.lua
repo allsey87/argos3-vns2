@@ -22,6 +22,9 @@ function step()
       end
    end
    time = time + 1
+   if robot.debug then
+      robot.debug.draw("arrow(blue)(0,0,0)(0,0,-0.50)")
+   end
 end
 
 function reset()

@@ -38,6 +38,10 @@ function step()
    end
    -- tick obstacle avoidance behavior tree
    behavior()
+   -- draw
+   if robot.debug then
+      robot.debug.draw("ring(yellow)(0,0,0)(0.25)")
+   end
 end
 
 function reset() end
