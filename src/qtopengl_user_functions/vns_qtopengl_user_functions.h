@@ -33,11 +33,53 @@ namespace argos {
       void Annotate(CDebugEntity& c_debug_entity,
                     const SAnchor& s_anchor);
 
+      virtual void DrawInWorld() override;
+
+   private:
+
+      CSpace& m_cSpace;
+      CQTOpenGLCamera::SSettings m_sCameraSettings; //?
+
+      struct SCameraPath {
+         SCameraPath(UInt32 un_duration,
+                     UInt32 un_start_focal_length,
+                     UInt32 un_end_focal_length,
+                     const CVector3& c_start_position,
+                     const CVector3& c_end_position,
+                     const CVector3& c_start_look_at,
+                     const CVector3& c_end_look_at,
+                     const CVector3& c_start_up = CVector3::ZERO,
+                     const CVector3& c_end_up = CVector3::ZERO,
+                     const SAnchor* ps_relative_to_anchor = nullptr) :
+            Duration(un_duration),
+            StartPosition(c_start_position),
+            EndPosition(c_end_position),
+            StartLookAt(c_start_look_at),
+            EndLookAt(c_end_look_at),
+            StartUp(c_start_up),
+            EndUp(c_end_up),
+            RelativeToAnchor(ps_relative_to_anchor) {}
+         UInt32 Duration;
+         UInt32 StartFocalLength;
+         UInt32 EndFocalLength;
+         CVector3 StartPosition;
+         CVector3 EndPosition;
+         CVector3 StartLookAt;
+         CVector3 EndLookAt;
+         CVector3 StartUp;
+         CVector3 EndUp;
+         const SAnchor* RelativeToAnchor;
+      };
+
+      std::vector<SCameraPath> m_vecCameraPaths;
+
    private:
 
       void DrawArrow3(const CVector3& c_from, const CVector3& c_to);
 
       void DrawRing3(const CVector3& c_center, Real f_radius);
+
+   private:
 
       struct CCachedShapes {
       public:
@@ -94,7 +136,7 @@ namespace argos {
          GLuint m_unRing;
       };
 
-      CSpace& m_cSpace;
+      
         
    };
 }

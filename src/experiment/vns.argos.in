@@ -39,7 +39,7 @@
         <wifi implementation="default" />
       </actuators>
       <sensors>
-        <drone_cameras_system implementation="default" show_frustum="false" show_tag_rays="true" />
+        <drone_cameras_system implementation="default" show_frustum="true" show_tag_rays="true" />
         <drone_flight_system implementation="default" />
         <wifi implementation="default" />
       </sensors>
@@ -121,7 +121,40 @@
     <qt-opengl lua_editor="false" show_boundary="false">
       <user_functions library="@CMAKE_BINARY_DIR@/qtopengl_user_functions/libvns_qtopengl_user_functions"
                       label="vns_qtopengl_user_functions" >
-
+         <camera_paths>
+            <path duration="250">
+              <start position="  0,-15, 7.5" look_at="0,0,0.25" lens_focal_length="60" />
+              <end position=" 12.5,-12.5, 10"  look_at="0,0,0.25" lens_focal_length="70" />
+            </path>
+            <path duration="250">
+              <start position=" 12.5,-12.5, 10"  look_at="0,0,0.25" lens_focal_length="70" />
+              <end position=" 15,  0, 7.5" look_at="0,0,0.25" lens_focal_length="60" />
+            </path>
+            <path duration="250">
+              <start position=" 15,  0, 7.5" look_at="0,0,0.25" lens_focal_length="60" />
+              <end position=" 12.5, 12.5, 10"  look_at="0,0,0.25" lens_focal_length="70" />
+            </path>
+            <path duration="250">
+              <start position=" 12.5, 12.5, 10"  look_at="0,0,0.25" lens_focal_length="70" />
+              <end position="  0, 15, 7.5" look_at="0,0,0.25" lens_focal_length="60" />
+            </path>
+            <path duration="250">
+              <start position="  0, 15, 7.5" look_at="0,0,0.25" lens_focal_length="60" />
+              <end position="-12.5, 12.5, 10"  look_at="0,0,0.25" lens_focal_length="70" />
+            </path>
+            <path duration="250">
+              <start position="-12.5, 12.5, 10"  look_at="0,0,0.25" lens_focal_length="70" />
+              <end position="-15,  0, 7.5" look_at="0,0,0.25" lens_focal_length="60" />
+            </path>
+            <path duration="250">
+              <start position="-15,  0, 7.5" look_at="0,0,0.25" lens_focal_length="60" />
+              <end position="-12.5,-12.5, 10"  look_at="0,0,0.25" lens_focal_length="70" />
+            </path>
+            <path duration="250">
+              <start position="-12.5,-12.5, 10"  look_at="0,0,0.25" lens_focal_length="70" />
+              <end position="0, -15, 7.5" look_at="0,0,0.25" lens_focal_length="60" />
+            </path>
+         </camera_paths>
       </user_functions>
       <camera>
         <placement idx="0" position="  0,  0, 20"  look_at="0,0,10"   lens_focal_length="50" up="1,0,0"/>
