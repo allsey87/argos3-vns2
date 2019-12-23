@@ -1,6 +1,6 @@
 # Virtual Nervous Systems (VNSs) for ARGoS-SRoCS
 
-This repository contains the ARGoS controllers and loop functions for investigating virtual nervous systems (VNSs) using the SRoCS plugins.
+This repository contains the ARGoS controllers, loop functions, and Qt-OpenGL user functions for investigating virtual nervous systems (VNSs) using the SRoCS platform.
 
 ## Dependencies
 * [ARGoS3 (beta56 or higher)](https://www.argos-sim.info/core.php)
@@ -28,7 +28,7 @@ make
 sudo make install
 ```
 
-3.  Compile from source and install ARGoS3-SRoCS as follows:
+3.  Compile from source and install ARGoS-SRoCS as follows:
 ```bash
 git clone https://github.com/allsey87/argos3-srocs.git
 cd argos3-srocs
@@ -39,7 +39,7 @@ make
 sudo make install
 ```
 
-4. Compile the loop functions and configure the experiments
+4. Compile the loop functions, Qt-OpenGL user functions, and configure the experiments
 ```bash
 # clone this repository (and its submodules)
 git clone --recursive https://github.com/allsey87/argos3-vns2.git
@@ -52,7 +52,7 @@ make
 ```
 
 ## Running experiments
-The ARGoS configuration files for running experiments are configured automatically by CMake and placed in `build/experiments`. These configuration files will be updated everytime cmake or make is executed and the input configuration (e.g., `src/experiments/vns.argos.in`) has been modified. To this end, you may want to consider modifying `src/experiments/srocs.argos.in` instead of `build/experiments/vns.argos` to avoid your changes being overwritten.
+The ARGoS configuration files for running experiments are configured automatically by CMake and placed in `build/experiments`. These configuration files will be updated everytime cmake or make is executed and the input configuration (e.g., `src/experiments/vns.argos.in`) has been modified. To this end, you may want to consider modifying `src/experiments/vns.argos.in` instead of `build/experiments/vns.argos` to avoid your changes being overwritten.
 
 Controller templates for the Drone and the Pi-Puck are provided. The Drone follows a trajectory specified in its controller, while the Pi-Puck uses a behavior trees to implement obstacle avoidance with the walls. Support for behavior trees is provided by [luabt](https://github.com/allsey87/luabt). This module is cloned recursively into this repository.
 
