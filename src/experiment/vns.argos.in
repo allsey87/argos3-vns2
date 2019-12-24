@@ -72,7 +72,7 @@
       <body position="-0.025,4.975,0"  orientation="0,0,0" />
     </box>
     <!-- add drones -->
-    <distribute>
+    <!--distribute>
       <position method="grid" center="0,0,0" distances="1.5,1.5,0" layout="5,1,1" />
       <orientation method="uniform" min="0,0,0" max="360,0,0" />
       <entity quantity="5" max_trials="5">
@@ -80,7 +80,11 @@
           <controller config="drone"/>
         </drone>
       </entity>
-    </distribute>
+    </distribute-->
+    <drone id="drone0">
+      <body position="0,0,0" orientation="0,0,0"/>
+      <controller config="drone"/>
+    </drone>
     <!-- add pi-puck robots -->
     <distribute>
       <position method="uniform" min="-4.5,-4.5,0" max="4.5,4.5,0" />
