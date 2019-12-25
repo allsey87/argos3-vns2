@@ -82,7 +82,23 @@
       </entity>
     </distribute-->
     <drone id="drone0">
+      <body position="-3,0,0" orientation="-60,0,0"/>
+      <controller config="drone"/>
+    </drone>
+    <drone id="drone1">
+      <body position="-1.5,0,0" orientation="-30,0,0"/>
+      <controller config="drone"/>
+    </drone>
+    <drone id="drone2">
       <body position="0,0,0" orientation="0,0,0"/>
+      <controller config="drone"/>
+    </drone>
+    <drone id="drone3">
+      <body position="1.5,0,0" orientation="30,0,0"/>
+      <controller config="drone"/>
+    </drone>
+    <drone id="drone4">
+      <body position="3,0,0" orientation="60,0,0"/>
       <controller config="drone"/>
     </drone>
     <!-- add pi-puck robots -->
