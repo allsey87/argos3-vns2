@@ -37,9 +37,6 @@ namespace argos {
 
    private:
 
-      CSpace& m_cSpace;
-      CQTOpenGLCamera::SSettings m_sCameraSettings; //?
-
       struct SCameraPath {
          SCameraPath(UInt32 un_duration,
                      UInt32 un_start_focal_length,
@@ -71,7 +68,12 @@ namespace argos {
          const SAnchor* RelativeToAnchor;
       };
 
+      CSpace& m_cSpace;
+
       std::vector<SCameraPath> m_vecCameraPaths;
+
+      UInt32 m_unCameraIndex;
+      UInt32 m_unLastSimulationClock;
 
    private:
 

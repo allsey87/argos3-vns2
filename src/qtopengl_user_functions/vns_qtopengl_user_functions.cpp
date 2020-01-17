@@ -16,7 +16,9 @@ namespace argos {
    /********************************************************************************/
 
    CVNSQTOpenGLUserFunctions::CVNSQTOpenGLUserFunctions() :
-      m_cSpace(CSimulator::GetInstance().GetSpace()) {
+      m_cSpace(CSimulator::GetInstance().GetSpace()),
+      m_unCameraIndex(0),
+      m_unLastSimulationClock(-1) {
       RegisterUserFunction<CVNSQTOpenGLUserFunctions, CPiPuckEntity>(&CVNSQTOpenGLUserFunctions::Annotate);
       RegisterUserFunction<CVNSQTOpenGLUserFunctions, CDroneEntity>(&CVNSQTOpenGLUserFunctions::Annotate);
    }
@@ -27,6 +29,10 @@ namespace argos {
    void CVNSQTOpenGLUserFunctions::Init(TConfigurationNode& t_tree) {
       if(NodeExists(t_tree, "camera_paths")) {
          TConfigurationNode& tCameraPaths = GetNode(t_tree, "camera_paths");
+         GetNodeAttribute(tCameraPaths, "use_camera", m_unCameraIndex);
+         if(m_unCameraIndex > 11) {
+            THROW_ARGOSEXCEPTION("use_camera must be in the range [0:11].");
+         }
          TConfigurationNodeIterator itPath("path");
          UInt32 unDuration, unStartFocalLength, unEndFocalLength;
          CVector3 cStartPosition, cEndPosition, cStartLookAt, cEndLookAt, cStartUp, cEndUp;
@@ -60,54 +66,57 @@ namespace argos {
 
    void CVNSQTOpenGLUserFunctions::DrawInWorld() {
       UInt32 unSimulationClock = m_cSpace.GetSimulationClock();
-      /* find current camera path */
-      UInt32 unPreviousPathDurations = 0;
-      for(const SCameraPath& s_camera_path : m_vecCameraPaths) {
-         if(unPreviousPathDurations + s_camera_path.Duration < unSimulationClock) {
-            unPreviousPathDurations += s_camera_path.Duration;
-         }
-         else {
-            Real fPathTimeFraction =
-               static_cast<Real>(unSimulationClock - unPreviousPathDurations) /
-               static_cast<Real>(s_camera_path.Duration);
-            CVector3 cPosition(s_camera_path.EndPosition - s_camera_path.StartPosition);
-            cPosition *= fPathTimeFraction;
-            cPosition += s_camera_path.StartPosition;
-            CVector3 cLookAt(s_camera_path.EndLookAt - s_camera_path.StartLookAt);
-            cLookAt *= fPathTimeFraction;
-            cLookAt += s_camera_path.StartLookAt;
-            CVector3 cUp(s_camera_path.EndUp - s_camera_path.StartUp);
-            cUp *= fPathTimeFraction;
-            cUp += s_camera_path.StartUp;
-            CQTOpenGLCamera::SSettings& sActiveSettings = 
-               GetQTOpenGLWidget().GetCamera().GetActiveSettings();
-            sActiveSettings.Position = cPosition;
-            sActiveSettings.Target = cLookAt;
-            sActiveSettings.Forward = 
-               (sActiveSettings.Target - sActiveSettings.Position).Normalize();
-            if(cUp == CVector3::ZERO) {
-               if(sActiveSettings.Forward.GetX() != 0 || sActiveSettings.Forward.GetY() != 0) {
-                  CVector2 cLeftXY(sActiveSettings.Forward.GetX(), sActiveSettings.Forward.GetY());
-                  cLeftXY.Perpendicularize();
-                  sActiveSettings.Left.Set(cLeftXY.GetX(), cLeftXY.GetY(), 0.0f);
-                  sActiveSettings.Left.Normalize();
-               }
-               else {
-                  sActiveSettings.Left.Set(0.0f, 1.0f, 0.0f);
-               }
-               /* Calculate the Up vector with a cross product */
-               sActiveSettings.Up = sActiveSettings.Forward;
-               sActiveSettings.Up.CrossProduct(sActiveSettings.Left).Normalize();
+      if(m_unLastSimulationClock != unSimulationClock) {
+         m_unLastSimulationClock = unSimulationClock;
+         /* get camera settings */
+         CQTOpenGLCamera::SSettings& sSettings = 
+            GetQTOpenGLWidget().GetCamera().GetSetting(m_unCameraIndex);
+         /* find current camera path */
+         UInt32 unPreviousPathDurations = 0;
+         for(const SCameraPath& s_camera_path : m_vecCameraPaths) {
+            if(unPreviousPathDurations + s_camera_path.Duration < unSimulationClock) {
+               unPreviousPathDurations += s_camera_path.Duration;
             }
             else {
-               sActiveSettings.Up = cUp;
-               sActiveSettings.Up.Normalize();
-               /* Calculate the Left vector with a cross product */
-               sActiveSettings.Left = sActiveSettings.Up;
-               sActiveSettings.Left.CrossProduct(sActiveSettings.Forward).Normalize();
+               Real fPathTimeFraction =
+                  static_cast<Real>(unSimulationClock - unPreviousPathDurations) /
+                  static_cast<Real>(s_camera_path.Duration);
+               CVector3 cPosition(s_camera_path.EndPosition - s_camera_path.StartPosition);
+               cPosition *= fPathTimeFraction;
+               cPosition += s_camera_path.StartPosition;
+               CVector3 cLookAt(s_camera_path.EndLookAt - s_camera_path.StartLookAt);
+               cLookAt *= fPathTimeFraction;
+               cLookAt += s_camera_path.StartLookAt;
+               CVector3 cUp(s_camera_path.EndUp - s_camera_path.StartUp);
+               cUp *= fPathTimeFraction;
+               cUp += s_camera_path.StartUp;
+               sSettings.Position = cPosition;
+               sSettings.Target = cLookAt;
+               sSettings.Forward = 
+                  (sSettings.Target - sSettings.Position).Normalize();
+               if(cUp == CVector3::ZERO) {
+                  if(sSettings.Forward.GetX() != 0 || sSettings.Forward.GetY() != 0) {
+                     CVector2 cLeftXY(sSettings.Forward.GetX(), sSettings.Forward.GetY());
+                     cLeftXY.Perpendicularize();
+                     sSettings.Left.Set(cLeftXY.GetX(), cLeftXY.GetY(), 0.0f);
+                     sSettings.Left.Normalize();
+                  }
+                  else {
+                     sSettings.Left.Set(0.0f, 1.0f, 0.0f);
+                  }
+                  /* Calculate the Up vector with a cross product */
+                  sSettings.Up = sSettings.Forward;
+                  sSettings.Up.CrossProduct(sSettings.Left).Normalize();
+               }
+               else {
+                  sSettings.Up = cUp;
+                  sSettings.Up.Normalize();
+                  /* Calculate the Left vector with a cross product */
+                  sSettings.Left = sSettings.Up;
+                  sSettings.Left.CrossProduct(sSettings.Forward).Normalize();
+               }
+               break;
             }
-            sActiveSettings.Do();
-            break;
          }
       }
    }
