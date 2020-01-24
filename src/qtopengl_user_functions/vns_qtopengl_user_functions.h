@@ -1,24 +1,54 @@
 #ifndef VNS_QTOPENGL_USER_FUNCTIONS_H
 #define VNS_QTOPENGL_USER_FUNCTIONS_H
 
+namespace argos {
+   class CVNSQtOpenGLUserFunctions;
+}
+
 #include <argos3/plugins/simulator/visualizations/qt-opengl/qtopengl_user_functions.h>
 #include <argos3/core/utility/datatypes/datatypes.h>
 #include <argos3/plugins/simulator/entities/debug_entity.h>
+#include <argos3/plugins/simulator/entities/block_entity.h>
+#include <argos3/plugins/robots/builderbot/simulator/builderbot_entity.h>
 #include <argos3/plugins/robots/pi-puck/simulator/pipuck_entity.h>
 #include <argos3/plugins/robots/drone/simulator/drone_entity.h>
 
 namespace argos {
-   class CVNSQTOpenGLUserFunctions : public QObject, 
-                                     public CQTOpenGLUserFunctions {
-
-   Q_OBJECT
+   class CVNSQtOpenGLUserFunctionsMouseWheelEventHandler : public QObject {
+      Q_OBJECT
 
    public:
+      CVNSQtOpenGLUserFunctionsMouseWheelEventHandler(QObject* pc_parent,
+                                                      CVNSQtOpenGLUserFunctions* pc_user_functions) :
+         QObject(pc_parent),
+         m_pcUserFunctions(pc_user_functions) {}
 
-      CVNSQTOpenGLUserFunctions();
-      virtual ~CVNSQTOpenGLUserFunctions();
+   protected:
+      bool eventFilter(QObject* pc_object, QEvent* pc_event);
+
+   private:
+      CVNSQtOpenGLUserFunctions* m_pcUserFunctions;
+   };
+
+   class CVNSQtOpenGLUserFunctions : public QObject,
+                                     public CQTOpenGLUserFunctions {
+      Q_OBJECT
+
+   public:
+      CVNSQtOpenGLUserFunctions();
+
+      virtual ~CVNSQtOpenGLUserFunctions();
 
       virtual void Init(TConfigurationNode& t_tree);
+
+      virtual void EntityMoved(CEntity& c_entity,
+                               const CVector3& c_old_pos,
+                               const CVector3& c_new_pos);
+
+      inline void Annotate(CBuilderBotEntity& c_entity) {
+         Annotate(c_entity.GetDebugEntity(),
+                  c_entity.GetEmbodiedEntity().GetOriginAnchor());
+      }
 
       inline void Annotate(CDroneEntity& c_entity) {
          Annotate(c_entity.GetDebugEntity(),
@@ -36,7 +66,6 @@ namespace argos {
       virtual void DrawInWorld() override;
 
    private:
-
       struct SCameraPath {
          SCameraPath(UInt32 un_duration,
                      UInt32 un_start_focal_length,
@@ -68,12 +97,11 @@ namespace argos {
          const SAnchor* RelativeToAnchor;
       };
 
-      CSpace& m_cSpace;
-
       std::vector<SCameraPath> m_vecCameraPaths;
-
       UInt32 m_unCameraIndex;
       UInt32 m_unLastSimulationClock;
+
+      CVNSQtOpenGLUserFunctionsMouseWheelEventHandler* m_pcMouseWheelEventHandler;
 
    private:
 
@@ -137,9 +165,6 @@ namespace argos {
          GLuint m_unCone;
          GLuint m_unRing;
       };
-
-      
-        
    };
 }
 #endif

@@ -34,16 +34,21 @@ configure_file(
   ${CMAKE_SOURCE_DIR}/experiment/luabt.lua
   ${CMAKE_BINARY_DIR}/experiment/luabt.lua
   COPYONLY)
-
 configure_file(
   ${CMAKE_SOURCE_DIR}/experiment/vns.argos.in
   ${CMAKE_BINARY_DIR}/experiment/vns.argos)
-
+configure_file(
+  ${CMAKE_SOURCE_DIR}/experiment/block.lua
+  ${CMAKE_BINARY_DIR}/experiment/block.lua
+  COPYONLY)
+configure_file(
+  ${CMAKE_SOURCE_DIR}/experiment/builderbot.lua
+  ${CMAKE_BINARY_DIR}/experiment/builderbot.lua
+  COPYONLY)
 configure_file(
   ${CMAKE_SOURCE_DIR}/experiment/drone.lua
   ${CMAKE_BINARY_DIR}/experiment/drone.lua
   COPYONLY)
-
 configure_file(
   ${CMAKE_SOURCE_DIR}/experiment/pipuck.lua
   ${CMAKE_BINARY_DIR}/experiment/pipuck.lua
