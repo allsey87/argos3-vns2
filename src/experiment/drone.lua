@@ -8,6 +8,7 @@ trajectory = {
 }
 
 function init()
+   robot.directional_leds.set_all_colors("red")
    for index, camera in ipairs(robot.cameras_system) do
       camera.enable()
    end

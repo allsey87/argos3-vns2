@@ -48,6 +48,7 @@
     <!-- drone controller -->
     <lua_controller id="drone">
       <actuators>
+        <directional_leds implementation="default" />
         <debug implementation="default">
           <interface id="draw" />
         </debug>
