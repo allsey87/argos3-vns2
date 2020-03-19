@@ -24,6 +24,7 @@ function step()
    end
    time = time + 1
    if robot.debug then
+      robot.debug.loop_functions("\"string from drone.lua\"")
       robot.debug.draw("arrow(blue)(0,0,0)(0,0,-0.50)")
    end
 end

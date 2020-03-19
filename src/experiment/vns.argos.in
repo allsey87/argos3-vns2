@@ -51,6 +51,7 @@
         <directional_leds implementation="default" />
         <debug implementation="default">
           <interface id="draw" />
+          <interface id="loop_functions" />
         </debug>
         <drone_flight_system implementation="default" />
         <wifi implementation="default" />
@@ -67,6 +68,7 @@
       <actuators>
         <debug implementation="default">
           <interface id="draw" />
+          <interface id="loop_functions" />
         </debug>
         <pipuck_differential_drive implementation="default" />
         <wifi implementation="default" />
