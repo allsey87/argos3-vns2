@@ -16,6 +16,9 @@
     <!-- block controller -->
     <lua_controller id="block">
       <actuators>
+        <debug implementation="default">
+          <interface id="draw" />
+        </debug>
         <directional_leds implementation="default" />
         <radios implementation="default"/>
       </actuators>

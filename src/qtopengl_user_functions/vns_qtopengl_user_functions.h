@@ -45,6 +45,11 @@ namespace argos {
                                const CVector3& c_old_pos,
                                const CVector3& c_new_pos);
 
+      inline void Annotate(CBlockEntity& c_entity) {
+         Annotate(c_entity.GetDebugEntity(),
+                  c_entity.GetEmbodiedEntity().GetOriginAnchor());
+      }
+
       inline void Annotate(CBuilderBotEntity& c_entity) {
          Annotate(c_entity.GetDebugEntity(),
                   c_entity.GetEmbodiedEntity().GetOriginAnchor());

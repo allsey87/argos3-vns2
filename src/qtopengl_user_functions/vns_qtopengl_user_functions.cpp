@@ -99,6 +99,7 @@ namespace argos {
    CVNSQtOpenGLUserFunctions::CVNSQtOpenGLUserFunctions() :
       m_unCameraIndex(0),
       m_unLastSimulationClock(-1) {
+      RegisterUserFunction<CVNSQtOpenGLUserFunctions, CBlockEntity>(&CVNSQtOpenGLUserFunctions::Annotate);
       RegisterUserFunction<CVNSQtOpenGLUserFunctions, CBuilderBotEntity>(&CVNSQtOpenGLUserFunctions::Annotate);
       RegisterUserFunction<CVNSQtOpenGLUserFunctions, CPiPuckEntity>(&CVNSQtOpenGLUserFunctions::Annotate);
       RegisterUserFunction<CVNSQtOpenGLUserFunctions, CDroneEntity>(&CVNSQtOpenGLUserFunctions::Annotate);
